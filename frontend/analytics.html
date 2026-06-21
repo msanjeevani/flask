@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CareMesh AI - Analytics</title>
+
+  <style>
+    body{
+      font-family: Arial, sans-serif;
+      background:#f4f6f9;
+      margin:0;
+      padding:0;
+    }
+
+    header{
+      background:#0b5ed7;
+      color:white;
+      padding:18px;
+      text-align:center;
+      font-size:22px;
+      font-weight:bold;
+    }
+
+    .container{
+      width:95%;
+      max-width:1100px;
+      margin:20px auto;
+    }
+
+    .top-bar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-bottom:15px;
+    }
+
+    .back{
+      display:inline-block;
+      padding:10px 15px;
+      background:#198754;
+      color:white;
+      text-decoration:none;
+      border-radius:8px;
+      font-weight:bold;
+    }
+    .back:hover{ background:#146c43; }
+
+    .title{
+      font-size:18px;
+      font-weight:bold;
+      color:#333;
+    }
+
+    .cards{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap:15px;
+      margin-top:15px;
+    }
+
+    .card{
+      background:white;
+      padding:18px;
+      border-radius:12px;
+      box-shadow:0px 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .card h3{
+      margin:0;
+      font-size:16px;
+      color:#555;
+    }
+
+    .card p{
+      margin:8px 0 0;
+      font-size:22px;
+      font-weight:bold;
+      color:#0b5ed7;
+    }
+
+    .section{
+      margin-top:20px;
+      background:white;
+      padding:18px;
+      border-radius:12px;
+      box-shadow:0px 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .section h2{
+      margin:0 0 12px;
+      font-size:18px;
+      color:#333;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:10px;
+    }
+
+    th, td{
+      padding:10px;
+      border-bottom:1px solid #ddd;
+      text-align:left;
+      font-size:14px;
+    }
+
+    th{
+      background:#0b5ed7;
+      color:white;
+    }
+
+    .status{
+      padding:6px 10px;
+      border-radius:15px;
+      font-size:13px;
+      font-weight:bold;
+      display:inline-block;
+    }
+
+    .pending{ background:#fff3cd; color:#856404; }
+    .confirmed{ background:#d1e7dd; color:#0f5132; }
+    .cancelled{ background:#f8d7da; color:#842029; }
+
+    .chart-box{
+      margin-top:15px;
+      display:flex;
+      justify-content:center;
+      align-items:flex-end;
+      gap:10px;
+      height:180px;
+      padding:10px;
+      background:#f8f9fa;
+      border-radius:10px;
+    }
+
+    .bar{
+      width:50px;
+      border-radius:8px 8px 0 0;
+      text-align:center;
+      color:white;
+      font-weight:bold;
+      font-size:14px;
+      display:flex;
+      justify-content:center;
+      align-items:flex-end;
+      padding-bottom:6px;
+    }
+
+    footer{
+      text-align:center;
+      padding:15px;
+      background:#0b5ed7;
+      color:white;
+      margin-top:20px;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>📊 CareMesh AI - Analytics Dashboard</header>
+
+<div class="container">
+
+  <div class="top-bar">
+    <a class="back" href="dashboard.html">⬅ Back to Home</a>
+    <div class="title">System Overview & Reports</div>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="cards">
+    <div class="card">
+      <h3>Total Users</h3>
+      <p id="totalUsers">0</p>
+    </div>
+
+    <div class="card">
+      <h3>Total Hospitals</h3>
+      <p id="totalHospitals">0</p>
+    </div>
+
+    <div class="card">
+      <h3>Total Appointments</h3>
+      <p id="totalAppointments">0</p>
+    </div>
+
+    <div class="card">
+      <h3>AI Recommendations</h3>
+      <p id="totalRecommendations">0</p>
+    </div>
+  </div>
+
+  <!-- Chart Section -->
+  <div class="section">
+    <h2>📌 Appointment Status Chart</h2>
+
+    <div class="chart-box">
+      <div class="bar" id="barPending" style="background:#ffc107; height:50px;">0</div>
+      <div class="bar" id="barConfirmed" style="background:#198754; height:80px;">0</div>
+      <div class="bar" id="barCancelled" style="background:#dc3545; height:30px;">0</div>
+    </div>
+
+    <p style="text-align:center; margin-top:10px; font-size:14px; color:#666;">
+      Pending | Confirmed | Cancelled
+    </p>
+  </div>
+
+  <!-- Recent Activity Table -->
+  <div class="section">
+    <h2>📝 Recent Appointments</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Patient Name</th>
+          <th>Hospital</th>
+          <th>Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="appointmentTable">
+        <!-- JS will fill -->
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<footer>© 2026 CareMesh AI - Analytics Page</footer>
+
+<script>
+  // Dummy Analytics Data (Sample)
+  const analyticsData = {
+    totalUsers: 25,
+    totalHospitals: 7,
+    totalAppointments: 18,
+    totalRecommendations: 12,
+
+    appointmentStatus: {
+      pending: 6,
+      confirmed: 9,
+      cancelled: 3
+    },
+
+    recentAppointments: [
+      { patient: "Arun Kumar", hospital: "MedCity General Hospital", date: "2026-01-20", status: "Pending" },
+      { patient: "Divya S", hospital: "Sunrise Medical Center", date: "2026-01-21", status: "Confirmed" },
+      { patient: "Rahul P", hospital: "NeuroCare Hospital", date: "2026-01-22", status: "Cancelled" },
+      { patient: "Meena R", hospital: "Children's Wellness Hospital", date: "2026-01-23", status: "Confirmed" }
+    ]
+  };
+
+  // Set Summary Cards
+  document.getElementById("totalUsers").innerText = analyticsData.totalUsers;
+  document.getElementById("totalHospitals").innerText = analyticsData.totalHospitals;
+  document.getElementById("totalAppointments").innerText = analyticsData.totalAppointments;
+  document.getElementById("totalRecommendations").innerText = analyticsData.totalRecommendations;
+
+  // Chart Values
+  document.getElementById("barPending").innerText = analyticsData.appointmentStatus.pending;
+  document.getElementById("barConfirmed").innerText = analyticsData.appointmentStatus.confirmed;
+  document.getElementById("barCancelled").innerText = analyticsData.appointmentStatus.cancelled;
+
+  // Chart Heights (simple scaling)
+  document.getElementById("barPending").style.height = (analyticsData.appointmentStatus.pending * 12) + "px";
+  document.getElementById("barConfirmed").style.height = (analyticsData.appointmentStatus.confirmed * 12) + "px";
+  document.getElementById("barCancelled").style.height = (analyticsData.appointmentStatus.cancelled * 12) + "px";
+
+  // Fill Table
+  const tableBody = document.getElementById("appointmentTable");
+  analyticsData.recentAppointments.forEach((a, index) => {
+    let statusClass = "pending";
+    if(a.status === "Confirmed") statusClass = "confirmed";
+    if(a.status === "Cancelled") statusClass = "cancelled";
+
+    tableBody.innerHTML += `
+      <tr>
+        <td>${index + 1}</td>
+        <td>${a.patient}</td>
+        <td>${a.hospital}</td>
+        <td>${a.date}</td>
+        <td><span class="status ${statusClass}">${a.status}</span></td>
+      </tr>
+    `;
+  });
+</script>
+
+</body>
+</html>

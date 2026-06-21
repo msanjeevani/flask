@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - HealthCare AI</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1976d2;
+      --primary-light: #42a5f5;
+      --primary-dark: #1565c0;
+      --secondary: #dc004e;
+      --success: #4caf50;
+      --warning: #ff9800;
+      --danger: #f44336;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --gray: #6c757d;
+      --border: #dee2e6;
+      --sidebar: #1e293b;
+      --sidebar-hover: #334155;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --radius: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Poppins', sans-serif; background: #f1f5f9; color: var(--dark); display: flex; min-height: 100vh; }
+
+    /* Sidebar */
+    .sidebar { width: 250px; background: var(--sidebar); color: white; position: fixed; height: 100vh; overflow-y: auto; transition: all 0.3s; z-index: 100; }
+    .sidebar-header { padding: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 10px; }
+    .sidebar-header .logo { font-size: 1.5rem; font-weight: 700; color: white; text-decoration: none; display: flex; align-items: center; gap: 10px; }
+    .sidebar-header .logo i { font-size: 2rem; color: var(--primary-light); }
+    .sidebar-menu { padding: 1rem 0; }
+    .sidebar-menu ul { list-style: none; }
+    .sidebar-menu li { margin-bottom: 0.25rem; }
+    .sidebar-menu a { display: flex; align-items: center; gap: 12px; padding: 0.875rem 1.5rem; color: #cbd5e1; text-decoration: none; transition: all 0.3s; border-left: 3px solid transparent; }
+    .sidebar-menu a:hover, .sidebar-menu a.active { background: var(--sidebar-hover); color: white; border-left-color: var(--primary-light); }
+    .sidebar-menu a i { width: 20px; text-align: center; }
+    .sidebar-footer { position: absolute; bottom: 0; width: 100%; padding: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1); }
+    .user-info { display: flex; align-items: center; gap: 12px; }
+    .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 600; }
+    .user-details h4 { font-size: 0.9rem; margin-bottom: 2px; }
+    .user-details small { color: #94a3b8; font-size: 0.8rem; }
+
+    /* Main Content */
+    .main-content { flex: 1; margin-left: 250px; padding: 20px; transition: all 0.3s; }
+    .top-bar { background: white; padding: 1rem 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+    .search-bar { display: flex; align-items: center; gap: 10px; background: #f8fafc; padding: 0.5rem 1rem; border-radius: 50px; width: 400px; }
+    .search-bar input { border: none; background: transparent; width: 100%; font-size: 0.9rem; color: var(--dark); }
+    .search-bar input:focus { outline: none; }
+    .top-bar-actions { display: flex; align-items: center; gap: 1rem; }
+
+    /* Notification */
+    .notification-wrapper { position: relative; cursor: pointer; }
+    .notification-badge { position: absolute; top: -5px; right: -5px; background: var(--danger); color: white; width: 18px; height: 18px; border-radius: 50%; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+    .notification-dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 28px;
+      width: 350px;
+      max-height: 400px;
+      overflow-y: auto;
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 10px 0;
+      z-index: 1000;
+    }
+    .notification-item {
+      display: flex;
+      gap: 12px;
+      padding: 12px 15px;
+      border-bottom: 1px solid #eee;
+      align-items: flex-start;
+      transition: background 0.2s;
+    }
+    .notification-item:last-child { border-bottom: none; }
+    .notification-item:hover { background: #f0f4f8; }
+    .notification-item .icon { font-size: 20px; margin-top: 3px; flex-shrink: 0; }
+    .notification-item .icon.success { color: green; }
+    .notification-item .icon.warning { color: orange; }
+    .notification-item .icon.info { color: var(--primary); }
+    .notification-item div strong { display: block; font-size: 14px; color: #333; }
+    .notification-item div p { font-size: 12px; color: #555; margin: 2px 0 0; }
+    .notification-dropdown::-webkit-scrollbar { width: 6px; }
+    .notification-dropdown::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 3px; }
+    .notification-dropdown::-webkit-scrollbar-track { background: #f1f1f1; }
+
+    /* Stats Grid */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+    .stat-card { background: white; padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); display: flex; align-items: center; justify-content: space-between; }
+    .stat-info h3 { font-size: 2rem; font-weight: 600; color: var(--dark); margin-bottom: 0.5rem; }
+    .stat-info p { color: var(--gray); font-size: 0.9rem; }
+    .stat-icon { width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white; }
+    .stat-icon.hospital { background: linear-gradient(135deg, #667eea, #764ba2); }
+    .stat-icon.recommendation { background: linear-gradient(135deg, #f093fb, #f5576c); }
+    .stat-icon.success { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+    .stat-icon.users { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+
+    /* Charts Grid */
+    .charts-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+    .chart-card { background: white; padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); }
+    .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+    .chart-header h3 { font-size: 1.25rem; font-weight: 600; }
+    .chart-container { height: 300px; position: relative; }
+
+    /* Recent Activity */
+    .activity-list { list-style: none; }
+    .activity-item { display: flex; align-items: center; gap: 1rem; padding: 1rem; border-bottom: 1px solid var(--border); }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; }
+    .activity-icon.success { background: var(--success); }
+    .activity-icon.warning { background: var(--warning); }
+    .activity-icon.info { background: var(--primary); }
+    .activity-details h4 { font-size: 0.95rem; margin-bottom: 4px; }
+    .activity-details p { color: var(--gray); font-size: 0.85rem; }
+
+    /* Quick Actions */
+    .quick-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 2rem; }
+    .action-btn { background: white; padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); text-align: center; text-decoration: none; color: var(--dark); transition: all 0.3s; border: 2px solid transparent; }
+    .action-btn:hover { border-color: var(--primary); transform: translateY(-5px); }
+    .action-btn i { font-size: 2rem; color: var(--primary); margin-bottom: 1rem; }
+    .action-btn h4 { font-size: 1rem; margin-bottom: 0.5rem; }
+    .action-btn p { color: var(--gray); font-size: 0.85rem; }
+
+    /* Mobile Responsive */
+    @media (max-width: 1024px) { .charts-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 768px) {
+        .sidebar { margin-left: -250px; }
+        .sidebar.active { margin-left: 0; }
+        .main-content { margin-left: 0; }
+        .search-bar { width: 300px; }
+    }
+    @media (max-width: 576px) {
+        .search-bar { width: 200px; }
+        .stats-grid { grid-template-columns: 1fr; }
+        .quick-actions { grid-template-columns: 1fr; }
+    }
+
+    /* Buttons */
+    .btn { padding: 0.5rem 1rem; border-radius: var(--radius); border: none; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.3s; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-dark); }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <a href="dashboard.html" class="logo"><i class="fas fa-brain"></i> HealthCare AI</a>
+    </div>
+    <div class="sidebar-menu">
+      <ul>
+        <li><a href="dashboard.html" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="recommendations.html"><i class="fas fa-hospital"></i> Recommendations</a></li>
+        <li><a href="analytics.html"><i class="fas fa-chart-line"></i> Analytics</a></li>
+        <li><a href="upload_case.html"><i class="fas fa-upload"></i> Upload Case</a></li>
+        <li><a href="doctors.html"><i class="fas fa-user-md"></i> Doctors</a></li>
+        <li><a href="appointments.html"><i class="fas fa-calendar-alt"></i> Appointments</a></li>
+        <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="user-avatar">AJ</div>
+        <div class="user-details"><h4>Alex Johnson</h4><small>Patient</small></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <div class="search-bar">
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="Search hospitals, doctors, or reports...">
+      </div>
+      <div class="top-bar-actions">
+        <!-- Notification Bell -->
+        <div class="notification-wrapper" id="notification-wrapper">
+          <i class="far fa-bell fa-lg"></i>
+          <span class="notification-badge" id="notification-count">5</span>
+
+          <!-- Dropdown -->
+          <div class="notification-dropdown" id="notification-dropdown">
+            <div class="notification-item">
+              <span class="icon success">✔️</span>
+              <div>
+                <strong>Case Analysis Complete</strong>
+                <p>Medical case #2024-0015 analyzed successfully • 10 min ago</p>
+              </div>
+            </div>
+            <div class="notification-item">
+              <span class="icon warning">⚠️</span>
+              <div>
+                <strong>New Recommendation</strong>
+                <p>AI suggested 3 hospitals for cardiac care • 45 min ago</p>
+              </div>
+            </div>
+            <div class="notification-item">
+              <span class="icon info">ℹ️</span>
+              <div>
+                <strong>Appointment Scheduled</strong>
+                <p>Cardiology appointment booked for March 15 • 1 hour ago</p>
+              </div>
+            </div>
+            <div class="notification-item">
+              <span class="icon info">ℹ️</span>
+              <div>
+                <strong>Lab Report Ready</strong>
+                <p>Blood test report is now available • 2 hours ago</p>
+              </div>
+            </div>
+            <div class="notification-item">
+              <span class="icon warning">⚠️</span>
+              <div>
+                <strong>Follow-up Needed</strong>
+                <p>Patient #2032 requires follow-up • Yesterday</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" onclick="window.location.href='upload_case.html'">
+          <i class="fas fa-plus"></i> New Case
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-info">
+          <h3>142</h3>
+          <p>Available Hospitals</p>
+          <small class="text-success">+12% this month</small>
+        </div>
+        <div class="stat-icon hospital"><i class="fas fa-hospital"></i></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <h3>28</h3>
+          <p>Active Recommendations</p>
+          <small class="text-primary">5 new today</small>
+        </div>
+        <div class="stat-icon recommendation"><i class="fas fa-star"></i></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <h3>94.2%</h3>
+          <p>Success Rate</p>
+          <small class="text-success">+2.5% from last month</small>
+        </div>
+        <div class="stat-icon success"><i class="fas fa-chart-line"></i></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <h3>1,248</h3>
+          <p>Active Users</p>
+          <small class="text-warning">32 new today</small>
+        </div>
+        <div class="stat-icon users"><i class="fas fa-users"></i></div>
+      </div>
+    </div>
+
+    <!-- Charts Grid -->
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Recommendation Trends</h3>
+          <select style="padding: 5px 10px; border-radius: var(--radius); border: 1px solid var(--border);">
+            <option>Last 7 days</option>
+            <option>Last 30 days</option>
+            <option>Last 3 months</option>
+          </select>
+        </div>
+        <div class="chart-container">
+          <canvas id="trendChart"></canvas>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Recent Activity</h3>
+          <a href="#" style="color: var(--primary); text-decoration: none; font-size: 0.9rem;">View All</a>
+        </div>
+        <ul class="activity-list">
+          <li class="activity-item">
+            <div class="activity-icon success"><i class="fas fa-check"></i></div>
+            <div class="activity-details"><h4>Case Analysis Complete</h4><p>Medical case #2024-0015 analyzed successfully</p><small>10 minutes ago</small></div>
+          </li>
+          <li class="activity-item">
+            <div class="activity-icon warning"><i class="fas fa-exclamation"></i></div>
+            <div class="activity-details"><h4>New Recommendation</h4><p>AI suggested 3 hospitals for cardiac care</p><small>45 minutes ago</small></div>
+          </li>
+          <li class="activity-item">
+            <div class="activity-icon info"><i class="fas fa-info"></i></div>
+            <div class="activity-details"><h4>Appointment Scheduled</h4><p>Cardiology appointment booked for March 15</p><small>2 hours ago</small></div>
+          </li>
+          <li class="activity-item">
+            <div class="activity-icon success"><i class="fas fa-upload"></i></div>
+            <div class="activity-details"><h4>Medical Report Uploaded</h4><p>CT Scan report uploaded successfully</p><small>4 hours ago</small></div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <h3 style="margin-top: 2rem; margin-bottom: 1rem;">Quick Actions</h3>
+    <div class="quick-actions">
+      <a href="upload_case.html" class="action-btn"><i class="fas fa-upload"></i><h4>Upload Medical Case</h4><p>Submit medical reports for AI analysis</p></a>
+      <a href="recommendations.html" class="action-btn"><i class="fas fa-hospital"></i><h4>Find Hospitals</h4><p>Get AI-powered hospital recommendations</p></a>
+      <a href="case history.html" class="action-btn"><i class="fas fa-calendar-check"></i><h4>Book Appointment</h4><p>Schedule appointments with doctors</p></a>
+      <a href="analytics.html" class="action-btn"><i class="fas fa-chart-bar"></i><h4>View Analytics</h4><p>Healthcare insights and statistics</p></a>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Trend Chart
+    const trendCtx = document.getElementById('trendChart').getContext('2d');
+    const trendChart = new Chart(trendCtx, {
+      type: 'line',
+      data: {
+        labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+        datasets: [
+          { label: 'Recommendations', data: [12,19,8,15,22,18,25], borderColor:'#1976d2', backgroundColor:'rgba(25,118,210,0.1)', tension:0.4, fill:true },
+          { label: 'Successful Cases', data: [8,12,6,10,15,12,18], borderColor:'#4caf50', backgroundColor:'rgba(76,175,80,0.1)', tension:0.4, fill:true }
+        ]
+      },
+      options: {
+        responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{ position:'top' } },
+        scales:{ y:{ beginAtZero:true, grid:{ drawBorder:false } }, x:{ grid:{ display:false } } }
+      }
+    });
+
+    // Mobile sidebar toggle
+    function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
+
+    // Hamburger menu
+    const topBar = document.querySelector('.top-bar');
+    const hamburgerBtn = document.createElement('button');
+    hamburgerBtn.innerHTML = '<i class="fas fa-bars"></i>';
+    hamburgerBtn.style.background='none'; hamburgerBtn.style.border='none'; hamburgerBtn.style.fontSize='1.2rem';
+    hamburgerBtn.style.cursor='pointer'; hamburgerBtn.style.marginRight='1rem'; hamburgerBtn.style.color='var(--dark)';
+    hamburgerBtn.onclick=toggleSidebar;
+    if(window.innerWidth<=768){ topBar.insertBefore(hamburgerBtn, topBar.firstChild); }
+
+    window.addEventListener('resize', function(){ trendChart.resize(); });
+
+    // Notification Dropdown
+    const bellWrapper = document.getElementById('notification-wrapper');
+    const bellDropdown = document.getElementById('notification-dropdown');
+
+    bellWrapper.addEventListener('click', (e) => {
+      e.stopPropagation();
+      bellDropdown.style.display = bellDropdown.style.display === 'block' ? 'none' : 'block';
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!bellWrapper.contains(e.target)) { bellDropdown.style.display = 'none'; }
+    });
+  </script>
+
+</body>
+</html>

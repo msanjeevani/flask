@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CareMesh AI - Recommendations</title>
+
+  <style>
+    body{
+      font-family: Arial, sans-serif;
+      background:#f4f6f9;
+      margin:0;
+      padding:0;
+    }
+
+    header{
+      background:#0b5ed7;
+      color:white;
+      padding:18px;
+      text-align:center;
+      font-size:22px;
+      font-weight:bold;
+    }
+
+    .container{
+      width:95%;
+      max-width:1100px;
+      margin:20px auto;
+    }
+
+    .back{
+      display:inline-block;
+      margin-bottom:15px;
+      padding:10px 15px;
+      background:#198754;
+      color:white;
+      text-decoration:none;
+      border-radius:8px;
+      font-weight:bold;
+    }
+    .back:hover{ background:#146c43; }
+
+    .card{
+      background:white;
+      padding:18px;
+      border-radius:12px;
+      margin-bottom:15px;
+      box-shadow:0px 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .hospital-name{
+      font-size:20px;
+      font-weight:bold;
+      color:#0b5ed7;
+      margin-bottom:8px;
+    }
+
+    .note{
+      margin-top:6px;
+      color:#666;
+      font-size:14px;
+    }
+
+    .specialties{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:10px;
+    }
+
+    /* Button Style */
+    .spec-btn{
+      border:none;
+      cursor:pointer;
+      background:#e9ecef;
+      padding:10px 14px;
+      border-radius:20px;
+      font-size:14px;
+      font-weight:bold;
+      color:#333;
+      transition:0.2s;
+    }
+
+    .spec-btn:hover{
+      background:#0b5ed7;
+      color:white;
+      transform:scale(1.03);
+    }
+
+    .spec-btn.selected{
+      background:#0b5ed7;
+      color:white;
+      box-shadow:0px 2px 6px rgba(0,0,0,0.15);
+    }
+
+    footer{
+      text-align:center;
+      padding:15px;
+      background:#0b5ed7;
+      color:white;
+      margin-top:20px;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>🏥 CareMesh AI - Hospital Recommendations</header>
+
+<div class="container">
+
+  <!-- Back to Home -->
+  <a class="back" href="dashboard.html">⬅ Back to Home</a>
+
+  <!-- MedCity General Hospital -->
+  <div class="card">
+    <div class="hospital-name">MedCity General Hospital</div>
+    <div class="note">Available Specialties:</div>
+
+    <div class="specialties">
+      <button class="spec-btn" onclick="selectSpecialty('MedCity General Hospital','Cardiology')">Cardiology</button>
+      <button class="spec-btn" onclick="selectSpecialty('MedCity General Hospital','Neurology')">Neurology</button>
+      <button class="spec-btn" onclick="selectSpecialty('MedCity General Hospital','Emergency Medicine')">Emergency Medicine</button>
+      <button class="spec-btn" onclick="selectSpecialty('MedCity General Hospital','General Surgery')">General Surgery</button>
+      <button class="spec-btn" onclick="selectSpecialty('MedCity General Hospital','Heart & Vascular Institute')">Heart & Vascular Institute</button>
+    </div>
+  </div>
+
+  <!-- Heart & Vascular Institute -->
+  <div class="card">
+    <div class="hospital-name">Heart & Vascular Institute</div>
+    <div class="note">Available Specialties:</div>
+
+    <div class="specialties">
+      <button class="spec-btn" onclick="selectSpecialty('Heart & Vascular Institute','Cardiology')">Cardiology</button>
+      <button class="spec-btn" onclick="selectSpecialty('Heart & Vascular Institute','Vascular Surgery')">Vascular Surgery</button>
+      <button class="spec-btn" onclick="selectSpecialty('Heart & Vascular Institute','Cardiac Rehabilitation')">Cardiac Rehabilitation</button>
+    </div>
+  </div>
+
+  <!-- Sunrise Medical Center -->
+  <div class="card">
+    <div class="hospital-name">Sunrise Medical Center</div>
+    <div class="note">Available Specialties:</div>
+
+    <div class="specialties">
+      <button class="spec-btn" onclick="selectSpecialty('Sunrise Medical Center','Cardiology')">Cardiology</button>
+      <button class="spec-btn" onclick="selectSpecialty('Sunrise Medical Center','Orthopedics')">Orthopedics</button>
+      <button class="spec-btn" onclick="selectSpecialty('Sunrise Medical Center','Surgery')">Surgery</button>
+      <button class="spec-btn" onclick="selectSpecialty('Sunrise Medical Center','Pediatrics')">Pediatrics</button>
+    </div>
+  </div>
+
+  <!-- NeuroCare Hospital -->
+  <div class="card">
+    <div class="hospital-name">NeuroCare Hospital</div>
+    <div class="note">Available Specialties:</div>
+
+    <div class="specialties">
+      <button class="spec-btn" onclick="selectSpecialty('NeuroCare Hospital','Neurology')">Neurology</button>
+      <button class="spec-btn" onclick="selectSpecialty('NeuroCare Hospital','Neurosurgery')">Neurosurgery</button>
+      <button class="spec-btn" onclick="selectSpecialty('NeuroCare Hospital','Rehabilitation')">Rehabilitation</button>
+    </div>
+  </div>
+
+  <!-- Children's Wellness Hospital -->
+  <div class="card">
+    <div class="hospital-name">Children's Wellness Hospital</div>
+    <div class="note">Available Specialties:</div>
+
+    <div class="specialties">
+      <button class="spec-btn" onclick="selectSpecialty(`Children's Wellness Hospital`,'Pediatrics')">Pediatrics</button>
+      <button class="spec-btn" onclick="selectSpecialty(`Children's Wellness Hospital`,'Neonatology')">Neonatology</button>
+      <button class="spec-btn" onclick="selectSpecialty(`Children's Wellness Hospital`,'Child Psychology')">Child Psychology</button>
+    </div>
+  </div>
+
+  <!-- Metro General Hospital -->
+  <div class="card">
+    <div class="hospital-name">Metro General Hospital</div>
+    <div class="note">Available Specialties:</div>
+
+    <div class="specialties">
+      <button class="spec-btn" onclick="selectSpecialty('Metro General Hospital','General Medicine')">General Medicine</button>
+      <button class="spec-btn" onclick="selectSpecialty('Metro General Hospital','Emergency')">Emergency</button>
+      <button class="spec-btn" onclick="selectSpecialty('Metro General Hospital','Internal Medicine')">Internal Medicine</button>
+    </div>
+  </div>
+
+  <!-- Cancer Treatment Center -->
+  <div class="card">
+    <div class="hospital-name">Cancer Treatment Center</div>
+    <div class="note">Available Specialties:</div>
+
+    <div class="specialties">
+      <button class="spec-btn" onclick="selectSpecialty('Cancer Treatment Center','Oncology')">Oncology</button>
+      <button class="spec-btn" onclick="selectSpecialty('Cancer Treatment Center','Radiation Therapy')">Radiation Therapy</button>
+      <button class="spec-btn" onclick="selectSpecialty('Cancer Treatment Center','Palliative Care')">Palliative Care</button>
+    </div>
+  </div>
+
+</div>
+
+<footer>© 2026 CareMesh AI - Recommendations Page</footer>
+
+<!-- JS -->
+<script>
+  function selectSpecialty(hospital, specialty){
+    // remove selected class from all buttons
+    document.querySelectorAll(".spec-btn").forEach(btn => btn.classList.remove("selected"));
+
+    // add selected class only to clicked button
+    event.target.classList.add("selected");
+
+    // show message (means button is working)
+    alert(" Selected Specialty: " + specialty + "\n Hospital: " + hospital);
+  }
+</script>
+
+</body>
+</html>

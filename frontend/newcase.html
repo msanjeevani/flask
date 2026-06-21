@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Case - HealthCare AI</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1976d2;
+      --primary-light: #42a5f5;
+      --primary-dark: #1565c0;
+      --secondary: #dc004e;
+      --success: #4caf50;
+      --warning: #ff9800;
+      --danger: #f44336;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --gray: #6c757d;
+      --border: #dee2e6;
+      --sidebar: #1e293b;
+      --sidebar-hover: #334155;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --radius: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Poppins', sans-serif; background: #f1f5f9; color: var(--dark); display: flex; min-height: 100vh; }
+
+    /* Sidebar (same as dashboard) */
+    .sidebar { width: 250px; background: var(--sidebar); color: white; position: fixed; height: 100vh; overflow-y: auto; transition: all 0.3s; z-index: 100; }
+    .sidebar-header { padding: 1.5rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); display: flex; align-items: center; gap: 10px; }
+    .sidebar-header .logo { font-size: 1.5rem; font-weight: 700; color: white; text-decoration: none; display: flex; align-items: center; gap: 10px; }
+    .sidebar-header .logo i { font-size: 2rem; color: var(--primary-light); }
+    .sidebar-menu { padding: 1rem 0; }
+    .sidebar-menu ul { list-style: none; }
+    .sidebar-menu li { margin-bottom: 0.25rem; }
+    .sidebar-menu a { display: flex; align-items: center; gap: 12px; padding: 0.875rem 1.5rem; color: #cbd5e1; text-decoration: none; transition: all 0.3s; border-left: 3px solid transparent; }
+    .sidebar-menu a:hover, .sidebar-menu a.active { background: var(--sidebar-hover); color: white; border-left-color: var(--primary-light); }
+    .sidebar-menu a i { width: 20px; text-align: center; }
+    .sidebar-footer { position: absolute; bottom: 0; width: 100%; padding: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+    .user-info { display: flex; align-items: center; gap: 12px; }
+    .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 600; }
+    .user-details h4 { font-size: 0.9rem; margin-bottom: 2px; }
+    .user-details small { color: #94a3b8; font-size: 0.8rem; }
+
+    /* Main Content */
+    .main-content { flex: 1; margin-left: 250px; padding: 20px; transition: all 0.3s; }
+
+    .top-bar { background: white; padding: 1rem 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+
+    h2 { text-align: center; margin-bottom: 20px; }
+
+    .form-container { background: white; padding: 2rem; border-radius: var(--radius); box-shadow: var(--shadow); max-width: 700px; margin: 0 auto; }
+    form { display: flex; flex-direction: column; gap: 15px; }
+    input, textarea, select { padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; }
+    button { padding: 12px; background-color: var(--primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; transition: background 0.3s ease; }
+    button:hover { background-color: var(--primary-dark); }
+    .back-link { display: inline-block; margin-top: 10px; color: var(--primary); text-decoration: none; }
+    .back-link:hover { text-decoration: underline; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar { margin-left: -250px; }
+      .sidebar.active { margin-left: 0; }
+      .main-content { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar (same as dashboard) -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <a href="dashboard.html" class="logo">
+        <i class="fas fa-brain"></i>
+        HealthCare AI
+      </a>
+    </div>
+    <div class="sidebar-menu">
+      <ul>
+        <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="recommendations.html"><i class="fas fa-hospital"></i> Recommendations</a></li>
+        <li><a href="analytics.html"><i class="fas fa-chart-line"></i> Analytics</a></li>
+        <li><a href="upload_case.html" class="active"><i class="fas fa-upload"></i> New Case</a></li>
+        <li><a href="doctors.html"><i class="fas fa-user-md"></i> Doctors</a></li>
+        <li><a href="appointments.html"><i class="fas fa-calendar-alt"></i> Appointments</a></li>
+        <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="user-avatar">AJ</div>
+        <div class="user-details">
+          <h4>Alex Johnson</h4>
+          <small>Patient</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="top-bar">
+      <h2>Create New Case</h2>
+    </div>
+
+    <div class="form-container">
+      <form id="newCaseForm">
+        <input type="text" name="patient_name" placeholder="Patient Name" required>
+        <input type="email" name="patient_email" placeholder="Patient Email" required>
+        <input type="text" name="patient_phone" placeholder="Patient Phone" required>
+        <textarea name="case_description" placeholder="Case Description" rows="5" required></textarea>
+        <select name="case_type" required>
+          <option value="">Select Case Type</option>
+          <option value="General">General</option>
+          <option value="Emergency">Emergency</option>
+          <option value="Follow-up">Follow-up</option>
+        </select>
+        <button type="submit"><i class="fas fa-plus"></i> Submit Case</button>
+      </form>
+      <a href="dashboard.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('newCaseForm');
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      alert('New case submitted successfully! (Frontend only, no database)');
+      form.reset();
+    });
+  </script>
+</body>
+</html>

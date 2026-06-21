@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - HealthCare AI</title>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome for icons (optional) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body{
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      background: #f4f6f8; /* Light background like Settings page */
+    }
+
+    .box{
+      width: 100%;
+      max-width: 450px;
+      background: #fff;
+      padding: 0;
+      border-radius: 16px;
+      box-shadow: 0px 10px 25px rgba(0,0,0,0.1);
+      overflow: hidden;
+      animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn{
+      from{
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to{
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Header like Settings page */
+    .box-header{
+      background: #2e7d32; /* Green color like your screenshot */
+      color: white;
+      text-align: center;
+      padding: 20px;
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    .box-content{
+      padding: 30px;
+    }
+
+    p{
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .input-group{
+      margin-bottom: 15px;
+    }
+
+    label{
+      font-size: 14px;
+      font-weight: 500;
+      color: #222;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    input{
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 2px solid #ddd;
+      outline: none;
+      font-size: 14px;
+      transition: 0.3s;
+      background: #f9fbff;
+    }
+
+    input:focus{
+      border-color: #2e7d32; /* Match green theme */
+      background: #fff;
+      box-shadow: 0px 0px 0px 3px rgba(46,125,50,0.15);
+    }
+
+    .btn{
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background: #2e7d32; /* Green button */
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 5px;
+    }
+
+    .btn:hover{
+      background: #27632a;
+      transform: translateY(-2px);
+    }
+
+    .extra{
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .extra a{
+      color: #2e7d32; /* Green links */
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .extra a:hover{
+      text-decoration: underline;
+    }
+
+    /* Message Box */
+    .message{
+      display: none;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      font-size: 14px;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .success{
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 1px solid #c8e6c9;
+    }
+
+    /* Responsive */
+    @media (max-width: 500px){
+      .box{
+        margin: 10px;
+      }
+      .box-content{
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="box">
+    <div class="box-header">Sign Up</div>
+    <div class="box-content">
+      <p>Create your account to continue</p>
+
+      <!-- Message Box -->
+      <div id="msgBox" class="message"></div>
+
+      <!-- Registration Form -->
+      <form id="registerForm">
+        <div class="input-group">
+          <label>Full Name</label>
+          <input type="text" id="name" placeholder="Enter your full name" required>
+        </div>
+
+        <div class="input-group">
+          <label>Email</label>
+          <input type="email" id="email" placeholder="Enter your email" required>
+        </div>
+
+        <div class="input-group">
+          <label>Password</label>
+          <input type="password" id="password" placeholder="Create password" required>
+        </div>
+
+        <button type="submit" class="btn">Create Account</button>
+      </form>
+
+      <div class="extra">
+        Already have an account? <a href="login.html">Login</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Simple success message simulation
+    const form = document.getElementById('registerForm');
+    const msgBox = document.getElementById('msgBox');
+
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      msgBox.textContent = "Registration Successful!";
+      msgBox.className = "message success";
+      msgBox.style.display = "block";
+
+      // Reset form after 2 seconds
+      setTimeout(()=>{
+        msgBox.style.display = "none";
+        form.reset();
+      }, 2000);
+    });
+  </script>
+
+</body>
+</html>

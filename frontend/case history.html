@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Case History</title>
+
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+            padding: 0;
+        }
+        header{
+            background: #0d6efd;
+            color: white;
+            padding: 18px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .container{
+            max-width: 900px;
+            margin: 25px auto;
+            padding: 15px;
+        }
+        .card{
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            margin-bottom: 15px;
+        }
+        .card h3{
+            margin: 0 0 8px;
+            color: #222;
+        }
+        .meta{
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 10px;
+        }
+        .status{
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+        .open{ background:#fff3cd; color:#856404; }
+        .closed{ background:#d4edda; color:#155724; }
+        .actions{
+            margin-top: 12px;
+        }
+        .btn{
+            border: none;
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .btn-view{ background:#0d6efd; color:white; }
+        .btn-delete{ background:#dc3545; color:white; }
+        .btn:hover{ opacity: 0.9; }
+        .empty{
+            text-align:center;
+            padding: 40px;
+            color:#666;
+        }
+        a.back{
+            display:inline-block;
+            margin-top: 10px;
+            text-decoration:none;
+            color:#0d6efd;
+            font-weight:bold;
+        }
+    </style>
+</head>
+
+<body>
+    <header>📋 Case History</header>
+
+    <div class="container">
+
+        <!-- Example Case 1 -->
+        <div class="card">
+            <h3>Case #101 - Fever & Headache</h3>
+            <div class="meta">Patient: Anu | Date: 28-Feb-2026</div>
+            <span class="status open">OPEN</span>
+
+            <div class="actions">
+                <button class="btn btn-view" onclick="viewCase(101)">View</button>
+                <button class="btn btn-delete" onclick="deleteCase(101)">Delete</button>
+            </div>
+        </div>
+
+        <!-- Example Case 2 -->
+        <div class="card">
+            <h3>Case #102 - Skin Allergy</h3>
+            <div class="meta">Patient: Priya | Date: 20-Jan-2026</div>
+            <span class="status closed">CLOSED</span>
+
+            <div class="actions">
+                <button class="btn btn-view" onclick="viewCase(102)">View</button>
+                <button class="btn btn-delete" onclick="deleteCase(102)">Delete</button>
+            </div>
+        </div>
+
+        <a class="back" href="dashboard.html">⬅ Back to Home</a>
+    </div>
+
+    <script>
+        function viewCase(caseId){
+            alert("Viewing Case ID: " + caseId);
+            // future: window.location.href = "/case/" + caseId;
+        }
+
+        function deleteCase(caseId){
+            if(confirm("Are you sure you want to delete Case ID: " + caseId + "?")){
+                alert("Deleted Case ID: " + caseId);
+                // future: API call for delete
+            }
+        }
+    </script>
+</body>
+</html>
